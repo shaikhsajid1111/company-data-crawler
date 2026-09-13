@@ -17,7 +17,7 @@ from company_data_crawler.models.company_data import CompanyData
 from company_data_crawler.sources.base import SourceProvider
 from company_data_crawler.sources.registry import SourceRegistry
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 
 __all__ = [
     "CompanyDataCrawler",

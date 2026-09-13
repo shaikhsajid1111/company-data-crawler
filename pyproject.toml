@@ -1,6 +1,6 @@
 [project]
 name = "company-data-crawler"
-version = "2.0.0"
+version = "3.0.0"
 description = "A pluggable web crawler that extracts firmographic company data (funding, employees, locations, executives, financials) into validated Pydantic models."
 readme = "README.md"
 requires-python = ">=3.10"
