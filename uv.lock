@@ -33,69 +33,6 @@ wheels = [
 ]
 
 [[package]]
-name = "b2b-firmographic-crawler"
-version = "2.0.0"
-source = { editable = "." }
-dependencies = [
-    { name = "babel" },
-    { name = "beautifulsoup4" },
-    { name = "curl-cffi" },
-    { name = "diskcache" },
-    { name = "fake-headers" },
-    { name = "price-parser" },
-    { name = "psycopg", extra = ["binary"] },
-    { name = "pydantic" },
-    { name = "pydantic-settings" },
-    { name = "pymongo" },
-    { name = "python-dateutil" },
-    { name = "selenium" },
-    { name = "seleniumbase" },
-    { name = "tldextract" },
-]
-
-[package.optional-dependencies]
-export = [
-    { name = "openpyxl" },
-    { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "pyarrow" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "black" },
-    { name = "pre-commit" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "babel", specifier = ">=2.18.0" },
-    { name = "beautifulsoup4", specifier = ">=4.15.0" },
-    { name = "curl-cffi", specifier = ">=0.16.3" },
-    { name = "diskcache", specifier = ">=5.6.3" },
-    { name = "fake-headers", specifier = ">=1.0.2" },
-    { name = "openpyxl", marker = "extra == 'export'", specifier = ">=3.1.0" },
-    { name = "pandas", marker = "extra == 'export'", specifier = ">=2.3.3" },
-    { name = "price-parser", specifier = ">=0.5.1" },
-    { name = "psycopg", extras = ["binary"], specifier = ">=3.3.5" },
-    { name = "pyarrow", marker = "extra == 'export'", specifier = ">=25.0.1" },
-    { name = "pydantic", specifier = ">=2.13.5" },
-    { name = "pydantic-settings", specifier = ">=2.15.0" },
-    { name = "pymongo", specifier = ">=4.18.0" },
-    { name = "python-dateutil", specifier = ">=2.9.0.post0" },
-    { name = "selenium", specifier = ">=4.48.0" },
-    { name = "seleniumbase", specifier = ">=4.53.7" },
-    { name = "tldextract", specifier = ">=5.3.2" },
-]
-provides-extras = ["export"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "black", specifier = ">=25.1.0" },
-    { name = "pre-commit", specifier = ">=4.0.0" },
-]
-
-[[package]]
 name = "babel"
 version = "2.18.0"
 source = { registry = "https://pypi.org/simple" }
@@ -494,6 +431,69 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697, upload-time = "2022-10-25T02:36:22.414Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335, upload-time = "2022-10-25T02:36:20.889Z" },
+]
+
+[[package]]
+name = "company-data-crawler"
+version = "2.0.0"
+source = { editable = "." }
+dependencies = [
+    { name = "babel" },
+    { name = "beautifulsoup4" },
+    { name = "curl-cffi" },
+    { name = "diskcache" },
+    { name = "fake-headers" },
+    { name = "price-parser" },
+    { name = "psycopg", extra = ["binary"] },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "pymongo" },
+    { name = "python-dateutil" },
+    { name = "selenium" },
+    { name = "seleniumbase" },
+    { name = "tldextract" },
+]
+
+[package.optional-dependencies]
+export = [
+    { name = "openpyxl" },
+    { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "pyarrow" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "black" },
+    { name = "pre-commit" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "babel", specifier = ">=2.18.0" },
+    { name = "beautifulsoup4", specifier = ">=4.15.0" },
+    { name = "curl-cffi", specifier = ">=0.16.3" },
+    { name = "diskcache", specifier = ">=5.6.3" },
+    { name = "fake-headers", specifier = ">=1.0.2" },
+    { name = "openpyxl", marker = "extra == 'export'", specifier = ">=3.1.0" },
+    { name = "pandas", marker = "extra == 'export'", specifier = ">=2.3.3" },
+    { name = "price-parser", specifier = ">=0.5.1" },
+    { name = "psycopg", extras = ["binary"], specifier = ">=3.3.5" },
+    { name = "pyarrow", marker = "extra == 'export'", specifier = ">=25.0.1" },
+    { name = "pydantic", specifier = ">=2.13.5" },
+    { name = "pydantic-settings", specifier = ">=2.15.0" },
+    { name = "pymongo", specifier = ">=4.18.0" },
+    { name = "python-dateutil", specifier = ">=2.9.0.post0" },
+    { name = "selenium", specifier = ">=4.48.0" },
+    { name = "seleniumbase", specifier = ">=4.53.7" },
+    { name = "tldextract", specifier = ">=5.3.2" },
+]
+provides-extras = ["export"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "black", specifier = ">=25.1.0" },
+    { name = "pre-commit", specifier = ">=4.0.0" },
 ]
 
 [[package]]

@@ -29,9 +29,9 @@ three jobs in order:
 
    | Field | Value |
    | ----- | ----- |
-   | PyPI project name | `b2b-firmographic-crawler` |
+   | PyPI project name | `company-data-crawler` |
    | Owner | `shaikhsajid1111` |
-   | Repository | `b2b-firmographic-crawler` |
+   | Repository | `company-data-crawler` |
    | Workflow filename | `publish.yml` |
    | Environment name | `pypi` |
 
@@ -48,7 +48,7 @@ That is all — no secrets are stored in the repository.
 
 1. **Bump the version** in two places — they must match:
    - `project.version` in `pyproject.toml`
-   - `__version__` in `src/b2b_firmographic_crawler/__init__.py`
+   - `__version__` in `src/company_data_crawler/__init__.py`
 
    The CI version gate requires them to equal the release tag (a leading `v`
    on the tag is fine: tag `v0.2.0` ↔ version `0.2.0`).
@@ -69,12 +69,12 @@ That is all — no secrets are stored in the repository.
    the `v0.2.0` tag → add release notes → **Publish release**.
 5. Watch the run under the **Actions** tab. When the `publish` job finishes,
    the new version is live on
-   <https://pypi.org/project/b2b-firmographic-crawler/>.
+   <https://pypi.org/project/company-data-crawler/>.
 6. Verify in a clean environment (the PyPI index can lag a minute or two):
 
    ```bash
-   uv run --with b2b-firmographic-crawler==0.2.0 \
-       python -c "import b2b_firmographic_crawler as c; print(c.__version__)"
+   uv run --with company-data-crawler==0.2.0 \
+       python -c "import company_data_crawler as c; print(c.__version__)"
    ```
 
 ## Alternative: publishing with an API token
@@ -119,7 +119,7 @@ Rehearse a release against [TestPyPI](https://test.pypi.org) first:
    uv pip install \
        --index-url https://test.pypi.org/simple/ \
        --index-strategy unsafe-best-match \
-       b2b-firmographic-crawler
+       company-data-crawler
    ```
 
 ## Publishing manually from your machine
@@ -136,7 +136,7 @@ UV_PUBLISH_TOKEN=pypi-xxxxxxxx uv publish
 Notes:
 
 - The project name must be available:
-  <https://pypi.org/project/b2b-firmographic-crawler>
+  <https://pypi.org/project/company-data-crawler>
 - PyPI never allows re-uploading the same version — bump the version and
   rebuild instead of retrying a failed-name upload.
 - Inspect the artifacts before publishing: `tar -tf dist/*.tar.gz` and

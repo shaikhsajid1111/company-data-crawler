@@ -1,4 +1,4 @@
-"""Offline test suite for b2b-firmographic-crawler.
+"""Offline test suite for company-data-crawler.
 
 Run with:
 
@@ -14,8 +14,8 @@ import tempfile
 import time
 import traceback
 
-from b2b_firmographic_crawler import (
-    B2BFirmographicCrawler,
+from company_data_crawler import (
+    CompanyDataCrawler,
     CompanyData,
     ICrawlerConfig,
     IQuery,
@@ -24,23 +24,23 @@ from b2b_firmographic_crawler import (
     SourceRegistry,
     register_source,
 )
-from b2b_firmographic_crawler.base.searcher import CompanySearcher
-from b2b_firmographic_crawler.orchestrators.search_orchestrator import (
+from company_data_crawler.base.searcher import CompanySearcher
+from company_data_crawler.orchestrators.search_orchestrator import (
     CompanySearchingService,
 )
-from b2b_firmographic_crawler.base.scraper import CompanyNameScraper, UrlScraper
-from b2b_firmographic_crawler.sources.craft.parsers.company_page_parser import (
+from company_data_crawler.base.scraper import CompanyNameScraper, UrlScraper
+from company_data_crawler.sources.craft.parsers.company_page_parser import (
     CraftParser,
 )
-from b2b_firmographic_crawler.sources.craft.parsers.search_result_parser import (
+from company_data_crawler.sources.craft.parsers.search_result_parser import (
     CraftSearchParser,
 )
-from b2b_firmographic_crawler.sources.craft.provider import CraftSource
-from b2b_firmographic_crawler.models.ticker_resolution import TickerResolution
-from b2b_firmographic_crawler.searchers.yahoo_finance_ticker_resolver import (
+from company_data_crawler.sources.craft.provider import CraftSource
+from company_data_crawler.models.ticker_resolution import TickerResolution
+from company_data_crawler.searchers.yahoo_finance_ticker_resolver import (
     YahooFinanceTickerResolver,
 )
-from b2b_firmographic_crawler.storage.persistent_disk_cache import DiskCache
+from company_data_crawler.storage.persistent_disk_cache import DiskCache
 
 # --------------------------------------------------------------------------
 # Fakes: canned Craft responses + scrapers that never touch the network.
@@ -278,7 +278,7 @@ def test_custom_source_string_dispatch():
             def get_company_data(self, url, config=None):
                 return CraftParser().parse(CRAFT_COMPANY_CACHE)
 
-    crawler = B2BFirmographicCrawler(cache_dir=tempfile.mkdtemp())
+    crawler = CompanyDataCrawler(cache_dir=tempfile.mkdtemp())
     assert "craft" in crawler.available_sources()
     assert "owler_mock" in crawler.available_sources()
 
@@ -306,7 +306,7 @@ def test_custom_source_string_dispatch():
 
 def test_facade_provider_caching_and_case_insensitivity():
     """Providers are created once per source; source names are case-insensitive."""
-    crawler = B2BFirmographicCrawler(cache_dir=tempfile.mkdtemp())
+    crawler = CompanyDataCrawler(cache_dir=tempfile.mkdtemp())
     provider = crawler._get_provider("craft")
     assert isinstance(provider, CraftSource)
     assert crawler._get_provider("craft") is provider
@@ -395,7 +395,7 @@ def test_facade_symbol_search_delegates_to_provider():
     The Yahoo resolver is replaced with a fake, so the test stays offline and
     only proves the facade -> SourceProvider.search_company_by_symbol wiring.
     """
-    import b2b_firmographic_crawler.sources.base as base_module
+    import company_data_crawler.sources.base as base_module
 
     if "symbol_mock" not in SourceRegistry.available_sources():
 
@@ -424,7 +424,7 @@ def test_facade_symbol_search_delegates_to_provider():
     original_resolver = base_module.YahooFinanceTickerResolver
     base_module.YahooFinanceTickerResolver = FakeTickerResolver
     try:
-        crawler = B2BFirmographicCrawler(cache_dir=tempfile.mkdtemp())
+        crawler = CompanyDataCrawler(cache_dir=tempfile.mkdtemp())
 
         results = crawler.search_company_by_symbol("msft", source="symbol_mock")
         assert results[0].company_name == "Stripe"
