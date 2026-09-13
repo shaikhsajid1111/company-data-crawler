@@ -1,6 +1,6 @@
 # company-data-crawler
 
-**A pluggable Python web crawler that turns public company pages into clean, validated firmographic data.**
+**A Python library to collect and structure company data from public sources.**
 
 [![Python versions](https://img.shields.io/badge/python-3.10+-blue.svg)](https://pypi.org/project/company-data-crawler/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
