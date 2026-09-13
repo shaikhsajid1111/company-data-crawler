@@ -1,18 +1,18 @@
-# b2b-firmographic-crawler
+# company-data-crawler
 
 **A pluggable Python web crawler that turns public company pages into clean, validated firmographic data.**
 
-[![Python versions](https://img.shields.io/badge/python-3.10+-blue.svg)](https://pypi.org/project/b2b-firmographic-crawler/)
+[![Python versions](https://img.shields.io/badge/python-3.10+-blue.svg)](https://pypi.org/project/company-data-crawler/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Beta-blue)](https://pypi.org/project/b2b-firmographic-crawler/)
+[![Status](https://img.shields.io/badge/Status-Beta-blue)](https://pypi.org/project/company-data-crawler/)
 
-b2b-firmographic-crawler searches for companies on supported data sources (Craft.co and Owler today, Crunchbase pluggable), scrapes their public company pages, and returns the result as a fully typed, validated `CompanyData` model — funding rounds, employee counts, office locations, key executives, industries, income statements and more.
+company-data-crawler searches for companies on supported data sources (Craft.co and Owler today, Crunchbase pluggable), scrapes their public company pages, and returns the result as a fully typed, validated `CompanyData` model — funding rounds, employee counts, office locations, key executives, industries, income statements and more.
 
 ## Disclaimer & privacy
 
 > **⚠️ This project is just code — the person using it is solely responsible for every action taken with it.**
 
-- b2b-firmographic-crawler accesses **only publicly available, unauthenticated web pages**. It does not log in anywhere, does not ask for or use credentials, and does not access, collect, or process any private, personal, or authenticated data. Anything behind logins, paywalls, or API keys is out of scope **by design**.
+- company-data-crawler accesses **only publicly available, unauthenticated web pages**. It does not log in anywhere, does not ask for or use credentials, and does not access, collect, or process any private, personal, or authenticated data. Anything behind logins, paywalls, or API keys is out of scope **by design**.
 - The software is provided **"AS IS", WITHOUT WARRANTY OF ANY KIND** (see the [MIT license](LICENSE)). The authors and contributors are **not liable** for any claim, damages, or other liability arising from its use or misuse — including how you collect, store, process, share, resell, or publish any data obtained with it.
 - **You** are solely responsible for making sure your use complies with all applicable laws and regulations — including copyright, data-protection and privacy laws (e.g. GDPR, CCPA), and computer-misuse laws — as well as each website's **terms of service**, **robots.txt**, and reasonable **rate limits**.
 - Do not use this tool for spam, harassment, surveillance, profiling of individuals, discrimination, or any unlawful purpose. If a website owner signals (through their terms, robots directives, or otherwise) that they do not want their data collected, respect that.
@@ -56,16 +56,16 @@ Requires **Python 3.10+**.
 
 ```bash
 # with pip
-pip install b2b-firmographic-crawler
+pip install company-data-crawler
 
 # or with uv (recommended)
-uv add b2b-firmographic-crawler
+uv add company-data-crawler
 ```
 
 To also get the CSV, Excel and Parquet exporters (pandas + PyArrow + openpyxl):
 
 ```bash
-pip install "b2b-firmographic-crawler[export]"
+pip install "company-data-crawler[export]"
 ```
 
 > [!NOTE]
@@ -75,9 +75,9 @@ pip install "b2b-firmographic-crawler[export]"
 ## Quick start
 
 ```python
-from b2b_firmographic_crawler import B2BFirmographicCrawler
+from company_data_crawler import CompanyDataCrawler
 
-crawler = B2BFirmographicCrawler(cache_dir="./cache")
+crawler = CompanyDataCrawler(cache_dir="./cache")
 
 # 1. Find a company by name
 results = crawler.search_company("stripe", source="craft")
@@ -192,7 +192,7 @@ source.
 
 ### How sources work
 
-Each source is a **self-contained package** under `b2b_firmographic_crawler.sources.<name>`
+Each source is a **self-contained package** under `company_data_crawler.sources.<name>`
 that bundles its own crawlers and parsers:
 
 - **Crawlers** (`sources/<name>/crawlers/`) — fetch pages and search results from the website
@@ -214,7 +214,7 @@ crawlers and parsers — the caching, exports and storage come for free.
 Pass a config to the crawler (applies to every call) or per call:
 
 ```python
-from b2b_firmographic_crawler import ICrawlerConfig
+from company_data_crawler import ICrawlerConfig
 
 config = ICrawlerConfig(
     proxy="user:pass@proxy-host:8080",   # HTTP proxy for scraping
@@ -225,7 +225,7 @@ config = ICrawlerConfig(
     force_rescrape=False,                # True = ignore the cache completely
 )
 
-crawler = B2BFirmographicCrawler(config=config, cache_dir="./cache")
+crawler = CompanyDataCrawler(config=config, cache_dir="./cache")
 # or one-off:
 company = crawler.get_company_data(url, source="craft", config=config)
 ```
@@ -244,7 +244,7 @@ company = crawler.get_company_data(url, source="craft", config=config)
 ### `IQuery` — search queries
 
 ```python
-from b2b_firmographic_crawler import IQuery
+from company_data_crawler import IQuery
 
 IQuery(company_name="stripe")   # used internally by search_company()
 IQuery(stock_ticket="CRWD")     # at least one field must be non-empty
@@ -272,14 +272,14 @@ and gentle on the target site:
   Company pages are keyed by their full URL, which already contains the
   source's domain.
 - `cache_dir` defaults to the current working directory; pass
-  `B2BFirmographicCrawler(cache_dir=...)` to control it.
+  `CompanyDataCrawler(cache_dir=...)` to control it.
 - Entries expire after `company_cache_expiry_time_days` /
   `search_cache_expiry_time_days`.
 - Set `force_rescrape=True` to ignore cached data for a run.
 
 ```python
-from b2b_firmographic_crawler import CompanyData
-from b2b_firmographic_crawler.storage import DiskCache
+from company_data_crawler import CompanyData
+from company_data_crawler.storage import DiskCache
 
 cache = DiskCache(CompanyData, base_dir="./cache")   # ./cache/CompanyData
 cache.delete("https://craft.co/stripe")              # drop one entry
@@ -289,7 +289,7 @@ cache.clear()                                        # drop the whole model's ca
 ## Exporting data
 
 ```python
-from b2b_firmographic_crawler.services import (
+from company_data_crawler.services import (
     CSVExporter,
     ExcelExporter,
     JSONExporter,
@@ -315,8 +315,8 @@ so re-running a crawler simply refreshes the existing rows/documents.
 ### PostgreSQL (JSONB)
 
 ```python
-from b2b_firmographic_crawler.interfaces.iconfig import IDatabaseConfig
-from b2b_firmographic_crawler.storage import PostgreSQLStorage
+from company_data_crawler.interfaces.iconfig import IDatabaseConfig
+from company_data_crawler.storage import PostgreSQLStorage
 
 config = IDatabaseConfig(
     driver="postgresql",
@@ -335,7 +335,7 @@ store.store_data(company)       # upsert keyed by company_domain
 ### MongoDB
 
 ```python
-from b2b_firmographic_crawler.storage import MongoDBStorage
+from company_data_crawler.storage import MongoDBStorage
 
 store = MongoDBStorage(
     IDatabaseConfig(
@@ -378,7 +378,7 @@ config = IDatabaseConfig()      # reads DB_* from the environment
 ## The data model
 
 Every source returns the same schema. `CompanyData` is the top-level model;
-all nested models live in `b2b_firmographic_crawler.models`.
+all nested models live in `company_data_crawler.models`.
 
 ### `CompanyData`
 
@@ -451,7 +451,7 @@ Example record (abridged):
 ## Adding a new source
 
 The crawler is source-agnostic: each source is a **self-contained package** under
-`b2b_firmographic_crawler.sources.<name>` that bundles its own **crawlers** (fetch
+`company_data_crawler.sources.<name>` that bundles its own **crawlers** (fetch
 pages) and **parsers** (extract `CompanyData`). The source registers a **provider**
 that wires these pieces into the generic orchestrators, giving you caching,
 exporters and storage for free.
@@ -459,7 +459,7 @@ exporters and storage for free.
 ### 1. Create the source package
 
 ```
-src/b2b_firmographic_crawler/sources/
+src/company_data_crawler/sources/
   owler/
     __init__.py                  # exports OwlerSource and its crawlers/parsers
     provider.py                  # OwlerSource(SourceProvider) — wires everything
@@ -480,8 +480,8 @@ src/b2b_firmographic_crawler/sources/
 Implement the low-level pieces by subclassing the base contracts:
 
 ```python
-# src/b2b_firmographic_crawler/sources/owler/crawlers/http_url_crawler.py
-from b2b_firmographic_crawler.base.scraper import UrlScraper
+# src/company_data_crawler/sources/owler/crawlers/http_url_crawler.py
+from company_data_crawler.base.scraper import UrlScraper
 
 class OwlerHttpUrlScraper(UrlScraper):
     """Fetches an Owler company page over HTTP."""
@@ -494,9 +494,9 @@ class OwlerHttpUrlScraper(UrlScraper):
 ```
 
 ```python
-# src/b2b_firmographic_crawler/sources/owler/parsers/company_page_parser.py
-from b2b_firmographic_crawler.base.parser import Parser
-from b2b_firmographic_crawler.models.company_data import CompanyData
+# src/company_data_crawler/sources/owler/parsers/company_page_parser.py
+from company_data_crawler.base.parser import Parser
+from company_data_crawler.models.company_data import CompanyData
 
 class OwlerParser(Parser):
     """Maps the raw page onto CompanyData."""
@@ -506,8 +506,8 @@ class OwlerParser(Parser):
 ```
 
 ```python
-# src/b2b_firmographic_crawler/sources/owler/crawlers/http_company_search_crawler.py
-from b2b_firmographic_crawler.base.scraper import CompanyNameScraper
+# src/company_data_crawler/sources/owler/crawlers/http_company_search_crawler.py
+from company_data_crawler.base.scraper import CompanyNameScraper
 
 class OwlerCompanySearchService(CompanyNameScraper):
     def scrape(self, query, config=None) -> str:
@@ -515,9 +515,9 @@ class OwlerCompanySearchService(CompanyNameScraper):
 ```
 
 ```python
-# src/b2b_firmographic_crawler/sources/owler/parsers/search_result_parser.py
-from b2b_firmographic_crawler.base.search_parser import SearchResponseParser
-from b2b_firmographic_crawler.interfaces.search_response import ISearchResponse
+# src/company_data_crawler/sources/owler/parsers/search_result_parser.py
+from company_data_crawler.base.search_parser import SearchResponseParser
+from company_data_crawler.interfaces.search_response import ISearchResponse
 
 class OwlerSearchParser(SearchResponseParser):
     def parse(self, data) -> list[ISearchResponse]:
@@ -532,18 +532,18 @@ class OwlerSearchParser(SearchResponseParser):
 ### 2. Wire them together and register
 
 ```python
-# src/b2b_firmographic_crawler/sources/owler/provider.py
+# src/company_data_crawler/sources/owler/provider.py
 from typing import Optional
 
-from b2b_firmographic_crawler.base.searcher import CompanySearcher
-from b2b_firmographic_crawler.interfaces.iconfig import ICrawlerConfig, IQuery
-from b2b_firmographic_crawler.interfaces.search_response import ISearchResponse
-from b2b_firmographic_crawler.models.company_data import CompanyData
-from b2b_firmographic_crawler.orchestrators.scraping_orchestrator import CompanyPageScrapingService
-from b2b_firmographic_crawler.orchestrators.search_orchestrator import CompanySearchingService
-from b2b_firmographic_crawler.searchers.search_by_name import CompanySearchByName
-from b2b_firmographic_crawler.sources.base import SourceProvider
-from b2b_firmographic_crawler.sources.registry import SourceRegistry
+from company_data_crawler.base.searcher import CompanySearcher
+from company_data_crawler.interfaces.iconfig import ICrawlerConfig, IQuery
+from company_data_crawler.interfaces.search_response import ISearchResponse
+from company_data_crawler.models.company_data import CompanyData
+from company_data_crawler.orchestrators.scraping_orchestrator import CompanyPageScrapingService
+from company_data_crawler.orchestrators.search_orchestrator import CompanySearchingService
+from company_data_crawler.searchers.search_by_name import CompanySearchByName
+from company_data_crawler.sources.base import SourceProvider
+from company_data_crawler.sources.registry import SourceRegistry
 
 from .crawlers.http_company_search_crawler import OwlerCompanySearchService
 from .crawlers.http_url_crawler import OwlerHttpUrlScraper
@@ -582,15 +582,15 @@ class OwlerSource(SourceProvider):
 ### 3. Use it like any other source
 
 ```python
-from b2b_firmographic_crawler import B2BFirmographicCrawler
-import b2b_firmographic_crawler.sources.owler  # noqa: F401 — registers the source on import
+from company_data_crawler import CompanyDataCrawler
+import company_data_crawler.sources.owler  # noqa: F401 — registers the source on import
 
-crawler = B2BFirmographicCrawler()
+crawler = CompanyDataCrawler()
 company = crawler.get_company_data_by_name("acme", source="owler")
 ```
 
 > **Tip:** The `CompanyPageScrapingService` and `CompanySearchingService` from
-> `b2b_firmographic_crawler.orchestrators` are generic, source-agnostic services.
+> `company_data_crawler.orchestrators` are generic, source-agnostic services.
 > Each source provider owns its website-specific crawlers and parsers, and plugs
 > them into these shared orchestrators. This means adding a new source only
 > requires implementing the website-specific pieces — caching, exports and
@@ -628,8 +628,8 @@ The tests are plain functions, so they also run under pytest:
 ## Project structure
 
 ```text
-src/b2b_firmographic_crawler/
-├── __init__.py            # B2BFirmographicCrawler facade + register_source
+src/company_data_crawler/
+├── __init__.py            # CompanyDataCrawler facade + register_source
 ├── models/                # CompanyData and nested Pydantic models
 ├── interfaces/            # ICrawlerConfig, IQuery, IDatabaseConfig, ISearchResponse
 ├── base/                  # abstract contracts (scraper, parser, searcher, storage, ...)
@@ -724,7 +724,7 @@ the repository).
 
 The short version of a release:
 
-1. Bump the version in `pyproject.toml` and `src/b2b_firmographic_crawler/__init__.py`
+1. Bump the version in `pyproject.toml` and `src/company_data_crawler/__init__.py`
 2. Commit, push, and tag `vX.Y.Z`
 3. Create the GitHub Release — Actions publishes it to PyPI
 
@@ -737,8 +737,8 @@ manual `uv publish`, and troubleshooting.
 Issues and pull requests are welcome! For local development:
 
 ```bash
-git clone https://github.com/shaikhsajid1111/b2b-firmographic-crawler.git
-cd b2b-firmographic-crawler
+git clone https://github.com/shaikhsajid1111/company-data-crawler.git
+cd company-data-crawler
 uv sync
 uv run python test.py
 ```

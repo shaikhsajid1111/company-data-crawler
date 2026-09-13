@@ -54,7 +54,7 @@ jobs:
           set -euo pipefail
           TAG_VERSION="${RELEASE_TAG#v}"
           PYPROJECT_VERSION="$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")"
-          PACKAGE_VERSION="$(sed -n 's/^__version__ = "\(.*\)"$/\1/p' src/b2b_firmographic_crawler/__init__.py)"
+          PACKAGE_VERSION="$(sed -n 's/^__version__ = "\(.*\)"$/\1/p' src/company_data_crawler/__init__.py)"
           echo "release tag : ${TAG_VERSION}"
           echo "pyproject   : ${PYPROJECT_VERSION}"
           echo "__version__ : ${PACKAGE_VERSION}"

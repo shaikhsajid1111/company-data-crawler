@@ -1,4 +1,4 @@
-# Pre-commit hooks for b2b-firmographic-crawler — Black enforcement at commit time.
+# Pre-commit hooks for company-data-crawler — Black enforcement at commit time.
 #
 # One-time activation (from the repo root):
 #   uv run pre-commit install        # installs the git hook
